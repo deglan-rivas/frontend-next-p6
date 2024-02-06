@@ -1,16 +1,62 @@
-import Layout from '../components/layout'
+import Layout from "../components/layout"
+import Guitarra from "../components/guitarra"
+import styles from '../styles/grid.module.css'
 
-export default function Home({guitarras, posts, curso}) {
+export default function Tienda({guitarras}) {
+  // console.log(guitarras)
+  // guitarras?.map(guitarra=>{console.log(guitarra.id, guitarra.attributes)})
 
   return (
-    <>
-      <Layout 
-        title={'Inicio'}
-        description={'Blog de música, venta de guitarras y más'}
-      >  
-        Tienda
+    <Layout
+      title={'Tienda Virtual'}
+      description="Tienda virtual, venta de guitarras, instrumentos, GuitarLA"
+    >
+        <main className="contenedor">
+            <h1 className="heading">Nuestra Colección</h1>
 
-      </Layout>
-    </>
+            <div className={styles.grid}>
+              {guitarras?.map(guitarra => {
+                // <>
+                  // console.log(guitarra.id, guitarra.attributes)
+                  // const obj = {
+                  //   nombre: guitarra.attributes.nombre,
+                  //   precio: guitarra.attributes.precio,
+                  //   descripcion: guitarra.attributes.descripcion[0].children[0].text,
+                  //   imagen: guitarra.attributes.imagen.data.attributes.formats.medium.url,
+                  //   url: guitarra.attributes.url,
+                  // }
+                  return <Guitarra
+                      key={guitarra.id}
+                      guitarra={guitarra.attributes}
+                  />
+                  // return <p>Ga</p>
+                // </>
+              })}
+            </div>
+        </main>
+    </Layout>
   )
+}
+
+
+// export async function getStaticProps() {
+//     const respuesta = await fetch(`${process.env.API_URL}/guitarras?populate=imagen`)
+//     const {data: guitarras} = await respuesta.json() 
+//     return {
+//       props: {
+//         guitarras
+//       }
+//     }
+// }
+
+
+export async function getServerSideProps() {
+    const respuesta = await fetch(`${process.env.API_URL}/guitarras?populate=imagen`)
+    const {data: guitarras} = await respuesta.json() 
+    // console.log(guitarras)
+    return {
+      props: {
+        guitarras
+      }
+    }
 }
